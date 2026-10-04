@@ -6,7 +6,7 @@ services:
     startCommand: python render_mcp_server.py
     envVars:
       - key: EDGAR_IDENTITY
-        value: mohammadhussainft@gmail.com 
+        value: Saahil mohammadhussainft@gmail.com 
       - key: PORT
         fromService:
           type: web
