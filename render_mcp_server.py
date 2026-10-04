@@ -41,10 +41,16 @@ from mcp.server.transport_security import TransportSecuritySettings
 mcp = FastMCP("edgartools", stateless_http=True, transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False))
 
 # Register all edgar tools
+import json
+
 for tool_name, info in TOOLS.items():
     def make_handler(name):
-        async def handler(**kwargs) -> str:
-            result = await call_tool_handler(name, kwargs)
+        async def handler(kwargs: str = "{}") -> str:
+            try:
+                parsed = json.loads(kwargs) if isinstance(kwargs, str) else (kwargs or {})
+            except json.JSONDecodeError:
+                return json.dumps({"success": False, "error": "kwargs must be a JSON object string"})
+            result = await call_tool_handler(name, parsed)
             return result.to_json()
         handler.__name__ = name
         return handler
