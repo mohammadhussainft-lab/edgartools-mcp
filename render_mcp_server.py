@@ -37,7 +37,8 @@ from edgar.ai.mcp.tools import company, search, filing, compare, ownership  # no
 from edgar.ai.mcp.tools.base import TOOLS, call_tool_handler
 
 # Create FastMCP server (path = /mcp by default)
-mcp = FastMCP("edgartools", stateless_http=True)
+from mcp.server.transport_security import TransportSecuritySettings
+mcp = FastMCP("edgartools", stateless_http=True, transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False))
 
 # Register all edgar tools
 for tool_name, info in TOOLS.items():
